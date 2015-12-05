@@ -14,23 +14,22 @@ UPDATE registrations SET streetname = array_to_string(regexp_matches(streetname,
 
 -- LANE, STREET, ROAD, PARKWAY, BOULEVARD, PLACE, BEACH
 
-UPDATE registrations SET streetname = regexp_replace( streetname, ' LA$', ' LANE', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' LN$', ' LANE', 'g');
+UPDATE registrations SET streetname = regexp_replace( streetname, ' L[AN]$', ' LANE', 'g');
 UPDATE registrations SET streetname = regexp_replace( streetname, ' PL$', ' PLACE', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' ST$| STR$', ' STREET', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' ST')
+UPDATE registrations SET streetname = regexp_replace( streetname, ' STR?$', ' STREET', 'g');
 UPDATE registrations SET streetname = regexp_replace( streetname, ' RD$', ' ROAD', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' PKWY$', 'PARKWAY', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' PKWY ', ' PARKWAY ', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' BLVD$', ' BOULEVARD', 'g');
-UPDATE registrations SET streetname = regexp_replace( streetname, ' BLVD ', ' BOULEVARD ', 'g');
+UPDATE registrations SET streetname = regexp_replace( streetname, ' PKWY($| )', 'PARKWAY', 'g');
+UPDATE registrations SET streetname = regexp_replace( streetname, ' BLVD($| )', ' BOULEVARD', 'g');
 UPDATE registrations SET streetname = regexp_replace( streetname, '^BCH ', 'BEACH ', 'g');
 
 -- DIRECTIONS
-UPDATE registrations SET streetname = regexp_replace( streetname, '^E ', 'EAST ');
-UPDATE registrations SET streetname = regexp_replace( streetname, '^W ', 'WEST ');
-UPDATE registrations SET streetname = regexp_replace( streetname, '^N ', 'NORTH ');
-UPDATE registrations SET streetname = regexp_replace( streetname, '^S ', 'SOUTH '); 
+UPDATE registrations SET streetname = regexp_replace( 
+  regexp_replace( 
+    regexp_replace( 
+      regexp_replace( streetname, '^S ', 'SOUTH ')
+    , '^N ', 'NORTH ')
+  , '^W ', 'WEST ')
+, '^E ', 'EAST ');
 
 --UPDATE registrations SET BusinessApartment = regexp_replace( BusinessApartment, '_|\.', '', 'g');
 
